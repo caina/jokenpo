@@ -29,9 +29,8 @@ export const Game: FunctionComponent<GameType> = () => {
     const makeBetIn = (times: number) => {
         if (times == 0) {
             setTimer(0)
-            fetcher.postData("/api/bet", moves[0]).then((data: Move[]) => {
-                setMoves(data.map((it: Move) => new Move({...it})))
-            })
+            fetcher.postData("/api/bet", moves[0])
+                .then((data: Move[]) => setMoves(data.map((it: Move) => new Move({...it}))))
         }
         if (times !== 0) {
             setTimer(times)
@@ -44,7 +43,11 @@ export const Game: FunctionComponent<GameType> = () => {
             return
         }
         setMoves([])
-
+        fetcher.postData(`/api/bet/auto`).then(data => setMoves(data.map((it: Move) => new Move({...it}))))
+            .catch(console.error)
+            .finally(() => {
+                autoBetTimeout = setTimeout(() => autoBet(), A_SECOND)
+            })
     }
 
     const makeMove = (move: Jokenpo) => {
@@ -86,6 +89,7 @@ export const Game: FunctionComponent<GameType> = () => {
                     />
                 </div>
                 <Button
+                    data-testid={data_testIds.autoPlay}
                     onClick={() => toggleAutoPlay()}
                     label={isAutoPlaying ? "Stop Auto play" : "Auto play"}
                 />
@@ -128,6 +132,7 @@ function selectMove(moves: Move[], index: number): Move {
 }
 
 export const data_testIds = {
+    autoPlay: "game-container__buttons_auto_play",
     rock: "game-container__buttons_rock",
     paper: "game-container__buttons_paper",
     scissor: "game-container__buttons_scissor"

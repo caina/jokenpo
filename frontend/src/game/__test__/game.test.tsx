@@ -12,18 +12,7 @@ jest.spyOn(global, 'setTimeout');
 
 const server = setupServer(
     rest.post('/api/bet/auto', (req, res, ctx) => {
-        return res(ctx.json([
-            {
-                isConn: true,
-                move: 'paper',
-                win: false
-            },
-            {
-                player: "conn",
-                move: 'scissor',
-                win: true
-            }
-        ]))
+        return res(ctx.json([]))
     })
 )
 
@@ -146,13 +135,14 @@ test("should be a robot match", async () => {
     )
 
     jest.useFakeTimers()
-    const {getByTestId, getByText} = render(<Game/>)
+    const {getByTestId, getByText, queryAllByText} = render(<Game/>)
 
     jest.runAllTimers();
-    fireEvent.click(getByTestId(data_testIds.rock))
+    fireEvent.click(getByTestId(data_testIds.autoPlay))
 
-    await waitFor(() => getByText("Its a tie!"))
+    await waitFor(() => getByText("House always win"))
 
-    expect(getByText("Its a tie!")).toBeInTheDocument()
+    expect(getByText("House always win")).toBeInTheDocument()
+    expect(queryAllByText("Robot")).toHaveLength(2)
 })
 
