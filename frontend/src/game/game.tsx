@@ -1,9 +1,9 @@
 import {FunctionComponent} from "react";
 import {useState} from "react";
+import {useEffect} from "react";
 import {GameCardComponent} from "./components/game-card/game-card.component";
 import {Button} from "./components/button/button";
 import {Jokenpo, Move} from "./dto";
-import {useEffect} from "react";
 import {Fetcher} from "../api";
 import './game.css'
 
@@ -29,7 +29,9 @@ export const Game: FunctionComponent<GameType> = () => {
     const makeBetIn = (times: number) => {
         if (times == 0) {
             setTimer(0)
-
+            fetcher.postData("/api/bet", moves[0]).then((data: Move[]) => {
+                setMoves(data.map((it: Move) => new Move({...it})))
+            })
         }
         if (times !== 0) {
             setTimer(times)
@@ -49,21 +51,21 @@ export const Game: FunctionComponent<GameType> = () => {
         setIsAutoPlaying(false)
         const playerMove = new Move()
         playerMove.move = move
-        playerMove.win = null
-        playerMove.player = "Player"
+        playerMove.isConn = false
         setMoves([playerMove])
         makeBetIn(3)
     }
 
+    const player1 = selectMove(moves, 0);
+    const player2 = selectMove(moves, 1);
+
     return (
         <section id="game-container">
-            <h1>Make your bet!</h1>
+            <h1>{headlineText(moves)}</h1>
             <div id="game-container__display">
-                <GameCardComponent label={selectMove(moves, 0).player} win={selectMove(moves, 0).win}
-                                   selected={selectMove(moves, 0).move}/>
+                <GameCardComponent label={player1.player} win={player1.win} selected={player1.move}/>
                 <h3> {timer === 0 ? "VS" : timer} </h3>
-                <GameCardComponent label={selectMove(moves, 1).player} win={selectMove(moves, 1).win}
-                                   selected={selectMove(moves, 1).move}/>
+                <GameCardComponent label={player2.player} win={player2.win} selected={player2.move}/>
             </div>
             <div id="game-container__gamepad">
                 <div id="game-container__buttons">
@@ -92,16 +94,35 @@ export const Game: FunctionComponent<GameType> = () => {
     )
 }
 
-function selectMove(moves: Move[], index: number): Move {
-    const defaultMove = () => {
-        const playerMove = new Move()
-        playerMove.move = undefined
-        playerMove.win = null
-        playerMove.player = "Choose your move"
-        return playerMove
+export function headlineText(moves: Move[]) {
+    const waitingMessages = {
+        "0": "Make your bet!",
+        "1": "Betting in progress"
+    }[moves.length]
+
+    if (waitingMessages) {
+        return waitingMessages
     }
+
+    const winner = moves.filter(it => it.win)
+    if (winner.length === 0) {
+        return "Its a tie!"
+    }
+
+    if (!moves.find(it => it.isConn == false)) {
+        return "House always win"
+    }
+
+    if (!winner[0].isConn) {
+        return "You win!"
+    } else {
+        return "You lose!"
+    }
+}
+
+function selectMove(moves: Move[], index: number): Move {
     if (!moves[index]) {
-        return defaultMove()
+        return new Move()
     }
     return moves[index]
 }

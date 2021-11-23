@@ -5,7 +5,18 @@ export enum Jokenpo {
 }
 
 export class Move {
-    player: string = ""
-    move?: Jokenpo = undefined
-    win: boolean | null = null
+    isConn: boolean | undefined = undefined;
+    move?: Jokenpo = undefined;
+    win: boolean | null = null;
+
+    get player() {
+        if (this.isConn === undefined) {
+            return "Choose your move";
+        }
+        return this.isConn ? "Robot" : "Player";
+    }
+
+    constructor(raw?: Partial<Move>) {
+        raw && Object.assign(this, raw);
+    }
 }

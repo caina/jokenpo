@@ -11,14 +11,20 @@ type GameCardComponentType = {
 export const GameCardComponent: FunctionComponent<GameCardComponentType> = ({
                                                                                 selected,
                                                                                 label,
-                                                                                win
+                                                                                win,
+                                                                                ...props
                                                                             }) => {
 
 
     return (
-        <div id="game-card">
+        <div id="game-card" {...props}>
             <div id="game-card__move" className={cardState(win)}>
-                <img src={`/assets/${selected}`} alt=""/>
+                {
+                    selected && (
+                        <img src={`/assets/${selected}`} alt={`card_figure_${selected.replace(".svg", "")}`}/>
+                    )
+                }
+
             </div>
             <div id="game-card__label">
                 <h6>{label}</h6>
