@@ -1,0 +1,35 @@
+#game-container {
+    width: 720px;
+    height: 600px;
+}
+
+#game-container h1 {
+    padding: 15px;
+    background-color: #FFCA3A;
+    color: #6A4C93;
+    max-width: 80%;
+    font-size: 4rem;
+    margin-bottom: 24px;
+    text-shadow: 1px 1px #6A4C93, -1px -1px #1982c4;
+    background-image: radial-gradient(#1982c4 0.5px, #FFCA3A 0.5px);
+    background-size: 10px 10px;
+}
+
+#game-container__display {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#game-container__gamepad {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+#game-container__buttons {
+    margin: 24px 0;
+    width: 350px;
+    display: flex;
+    justify-content: space-between;
+}

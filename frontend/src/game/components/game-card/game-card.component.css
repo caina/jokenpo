@@ -1,0 +1,35 @@
+#game-card__label {
+    background-color: #FFCA3A;
+    width: 50%;
+    height: 35px;
+
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0 16px;
+}
+
+#game-card__move {
+    width: 300px;
+    height: 300px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#game-card__move img{
+    max-width: 190px;
+}
+
+.idle {
+    background-color: #1982c4;
+}
+
+.win {
+    background-color: #8ac926;
+}
+
+.lose {
+    background-color: #ff595e;
+}

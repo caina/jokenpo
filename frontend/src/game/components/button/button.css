@@ -1,0 +1,30 @@
+button {
+    background-color: #1982c4;
+    border: none;
+
+    -webkit-box-shadow: 7px 7px 8px -1px rgba(0,0,0,0.17);
+    box-shadow: 7px 7px 8px -1px rgba(0,0,0,0.17);
+}
+
+button:hover {
+    cursor:pointer;
+    background-color: #FFCA3A;
+}
+
+button:active{
+    border: 4px #1982c4 solid;
+}
+
+.icon-button {
+    height: 90px;
+    width: 90px;
+}
+
+.label-button {
+    height: 60px;
+    width: 350px;
+
+    color: #6A4C93;
+    font-family: 'Odibee Sans', cursive;
+    font-size: 2rem;
+}
