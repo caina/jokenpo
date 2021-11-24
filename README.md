@@ -1,6 +1,7 @@
 # Joken PO!
 
-Its a simple rock scissor game
+It's a simple rock, paper scissor game
+you can simply run `./setup.sh` to install all dependencies and run all tests available
 
 ## Setting it up
 we are using a proxy, so just start backend and frontend would be enough to use this application. 

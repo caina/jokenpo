@@ -18,5 +18,9 @@ export class Move {
 
     constructor(raw?: Partial<Move>) {
         raw && Object.assign(this, raw);
+
+        if (raw && raw.move) {
+            this.move = (<any>Jokenpo)[raw.move]
+        }
     }
 }
