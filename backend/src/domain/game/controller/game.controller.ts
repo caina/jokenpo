@@ -1,30 +1,30 @@
-import {Controller} from "@nestjs/common";
-import {Post} from "@nestjs/common";
-import {Move} from "../dto";
-import {Jokenpo} from "../dto";
+import { Controller } from '@nestjs/common';
+import { Post } from '@nestjs/common';
+import { HttpCode } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
+import { Body } from '@nestjs/common';
+import { UsePipes } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
+import { Move } from '../dto';
+import { GameService } from '../service/game.service';
 
-@Controller("api/bet")
+@Controller('api/bet')
 export class GameController {
+  constructor(
+    @Inject(GameService)
+    private game: GameService,
+  ) {}
 
-    @Post()
-    async bet(): Promise<Move[]> {
+  @HttpCode(200)
+  @Post()
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async bet(@Body() move: Move): Promise<Move[]> {
+    return this.game.playerGame(move);
+  }
 
-        return [
-            new Move({
-                isConn: false,
-                win: false,
-                move: Jokenpo.PAPER
-            }),
-            new Move({
-                isConn: true,
-                win: false,
-                move: Jokenpo.PAPER
-            })
-        ]
-    }
-
-    @Post("/auto")
-    async auto(): Promise<Move[]> {
-        return []
-    }
+  @HttpCode(200)
+  @Post('/auto')
+  async auto(): Promise<Move[]> {
+    return this.game.autoPlay();
+  }
 }

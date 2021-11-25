@@ -1,4 +1,4 @@
 import { GamebotService } from './gamebot.service';
-import { GameFacade } from './game.facade';
+import { GameService } from './game.service';
 
-export const services = [GamebotService, GameFacade];
+export const services = [GamebotService, GameService];

@@ -1,9 +1,9 @@
-import { GameFacade } from './game.facade';
+import { GameService } from './game.service';
 import { GamebotService } from './gamebot.service';
 import { Move } from '../dto';
 import { Jokenpo } from '../dto';
 
-describe('game.facade.service', function () {
+describe('game.service.service', function () {
   describe('Checking rules', function () {
     it('Paper wins against Rock', async () => {
       await checkRule(
@@ -57,12 +57,26 @@ describe('game.facade.service', function () {
     }
   });
 
+  it('should play against bot', async () => {
+    const { facade, gameBotService } = setUp();
+    gameBotService.makeMove.mockReturnValue(
+      new Move({ isConn: true, move: Jokenpo.PAPER }),
+    );
+
+    const result = await facade.autoPlay();
+
+    expect(result).toEqual([
+      new Move({ isConn: true, move: Jokenpo.PAPER, win: false }),
+      new Move({ isConn: true, move: Jokenpo.PAPER, win: false }),
+    ]);
+  });
+
   function setUp() {
     const gameBotService = {
       makeMove: jest.fn(),
     };
 
-    const facade = new GameFacade(gameBotService as GamebotService);
+    const facade = new GameService(gameBotService as GamebotService);
 
     return {
       facade,
