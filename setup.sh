@@ -7,5 +7,7 @@ cd -
 
 cd ./backend
   npm i
+  npm run build
+  npm run test
   npm run test:e2e
 cd -

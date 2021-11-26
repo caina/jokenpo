@@ -3,6 +3,15 @@
 It's a simple rock, paper scissor game
 you can simply run `./setup.sh` to install all dependencies and run all tests available
 
+## Playing on the terminal
+
+Go to the `/backend` folder and execute to play against machine
+```bash
+node cli bet --move="ROCK"
+node cli bet --move="PAPER"
+node cli bet --move="SCISSOR"
+```
+
 ## Setting it up
 we are using a proxy, so just start backend and frontend would be enough to use this application. 
 
