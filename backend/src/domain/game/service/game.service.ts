@@ -3,12 +3,9 @@ import { Inject } from '@nestjs/common';
 import { GamebotService } from './gamebot.service';
 import { Move } from '../dto';
 import { Jokenpo } from '../dto';
-import { Logger } from '@nestjs/common';
 
 @Injectable()
 export class GameService {
-  private readonly logger = new Logger(GamebotService.name);
-
   constructor(
     @Inject(GamebotService)
     private gameBot: GamebotService,
@@ -40,8 +37,6 @@ export class GameService {
   }
 
   private applyRules(challenger: Jokenpo, challenged: Jokenpo) {
-    this.logger.log(`1:${challenger}`, `2:${challenged}`);
-
     return this.rules[challenger].includes(challenged);
   }
 }
