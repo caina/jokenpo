@@ -21,7 +21,7 @@ export const Game: FunctionComponent<GameType> = () => {
     setIsAutoPlaying(!isAutoPlaying);
   };
   useEffect(() => {
-    isAutoPlaying ? autoBet() : clearTimeout(autoBetTimeout);
+    isAutoPlaying ? autoBet() : clearAutoBet();
   }, [isAutoPlaying]);
 
   const makeBetIn = (move: Move, times: number) => {
@@ -38,6 +38,11 @@ export const Game: FunctionComponent<GameType> = () => {
       setTimeout(() => makeBetIn(move, times - 1), A_SECOND);
     }
   };
+
+  function clearAutoBet() {
+    clearTimeout(autoBetTimeout);
+    setMoves([]);
+  }
 
   const autoBet = () => {
     if (!isAutoPlaying) {
@@ -103,6 +108,7 @@ export const Game: FunctionComponent<GameType> = () => {
         <Button
           data-testid={data_testIds.autoPlay}
           onClick={() => toggleAutoPlay()}
+          active={isAutoPlaying}
           label={isAutoPlaying ? "Stop Auto play" : "Auto play"}
         />
       </div>

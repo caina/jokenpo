@@ -24,7 +24,13 @@ button:active{
     height: 60px;
     width: 350px;
 
+    background-color: #FFCA3A;
     color: #6A4C93;
     font-family: 'Odibee Sans', cursive;
     font-size: 2rem;
+}
+
+.active {
+    background-color: #ff595e !important;
+    color: #FFCA3A;
 }
