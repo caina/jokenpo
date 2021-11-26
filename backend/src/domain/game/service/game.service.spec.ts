@@ -76,7 +76,7 @@ describe('game.service.service', function () {
       makeMove: jest.fn(),
     };
 
-    const facade = new GameService(gameBotService as GamebotService);
+    const facade = new GameService(gameBotService as unknown as GamebotService);
 
     return {
       facade,

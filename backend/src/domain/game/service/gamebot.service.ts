@@ -5,18 +5,16 @@ import { Jokenpo } from '../dto';
 @Injectable()
 export class GamebotService {
   makeMove(): Move {
-    const move = randomMove();
+    const move = this.randomMove();
     return new Move({
       isConn: true,
       move,
     });
+  }
 
-    function randomMove(): Jokenpo {
-      const length = Object.keys(Jokenpo).length;
-      const option = +(Math.random() * length - 1).toFixed();
-      const move = Object.keys(Jokenpo)[option];
-
-      return move as Jokenpo;
-    }
+  randomMove(): Jokenpo {
+    const random = Math.floor(Math.random() * Object.keys(Jokenpo).length);
+    const selected = Object.values(Jokenpo)[random];
+    return Jokenpo[selected];
   }
 }
