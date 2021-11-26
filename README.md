@@ -1,7 +1,10 @@
 # Joken PO!
 
 It's a simple rock, paper scissor game
-you can simply run `./setup.sh` to install all dependencies and run all tests available
+you can simply run `./setup.sh` to install all dependencies and run all tests available,
+the setup is going to install all dependencies and run all tests.
+
+The bundle is available on the `/bundle` folder, although you would need a static file server for the front-end and a node server for the backend to run it. 
 
 > To run frontend tests
 
@@ -45,4 +48,11 @@ npm start
 - NestJS
 > A really great framework, it mimics angular way of development for the frontend, on the background its running a simple express, 
 > although It's easily switchable.
+
+## Additional notes.
+I'm using a library called `class-validator` to handle the request validations, and `@squareboat/nest-console` to handle the CLI.
+apart from those libraries no other dependency was used.
+
+for testing only components with business logic are tested. 
+I'm using msw to simulate the server instead of mocking fetch.
 
