@@ -3,6 +3,16 @@
 It's a simple rock, paper scissor game
 you can simply run `./setup.sh` to install all dependencies and run all tests available
 
+> To run frontend tests
+
+cd `/frontend` and install all node dependencies
+and run `npm run test`
+
+> Running backend tests
+
+go over the `/backend` folder with node dependencies installed
+- `npm run test` for unit tests
+- `npm run test:e2e` to integration tests
 ## Playing on the terminal
 
 Go to the `/backend` folder and execute to play against machine

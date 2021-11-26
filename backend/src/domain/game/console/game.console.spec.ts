@@ -22,6 +22,7 @@ describe('game.console.ts', function () {
   let service;
   const gameService = {
     playerGame: jest.fn(),
+    autoPlay: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -33,17 +34,28 @@ describe('game.console.ts', function () {
     jest.clearAllMocks();
   });
 
-  it('should not accept if argument does not contain a valid move', function () {
-    service.bet({ move: 'INVALID' } as CommandArguments);
-
-    expect(_cli.error).toHaveBeenCalledWith(GameConsole.messages.wrong_input);
-  });
-
-  it('should make bet', async () => {
-    gameService.playerGame.mockResolvedValue([
+  it('should say its a tie for auto play', async () => {
+    gameService.autoPlay.mockResolvedValue([
       new Move({
         move: Jokenpo.ROCK,
-        isConn: false,
+        isConn: true,
+        win: false,
+      }),
+      new Move({
+        move: Jokenpo.ROCK,
+        isConn: true,
+        win: false,
+      }),
+    ]);
+
+    await service.auto();
+    expect(_cli.info).toBeCalledWith(GameConsole.messages.tie);
+  });
+  it('should be able to auto play', async () => {
+    gameService.autoPlay.mockResolvedValue([
+      new Move({
+        move: Jokenpo.ROCK,
+        isConn: true,
         win: true,
       }),
       new Move({
@@ -53,53 +65,81 @@ describe('game.console.ts', function () {
       }),
     ]);
 
-    await service.bet({ move: 'ROCK' } as CommandArguments);
+    await service.auto();
 
-    expect(_cli.error).not.toHaveBeenCalled();
-    expect(gameService.playerGame).toHaveBeenCalledWith(
-      new Move({ isConn: false, move: Jokenpo.ROCK }),
-    );
-    expect(_cli.success).toHaveBeenCalledWith(GameConsole.messages.win);
+    expect(_cli.success).toBeCalledWith(`bot01 win with ROCK`);
+    expect(_cli.error).toBeCalledWith(`bot02 lose with SCISSOR`);
   });
 
-  it('should lose the game', async () => {
-    gameService.playerGame.mockResolvedValue([
-      new Move({
-        move: Jokenpo.SCISSOR,
-        isConn: false,
-        win: false,
-      }),
-      new Move({
-        move: Jokenpo.ROCK,
-        isConn: true,
-        win: true,
-      }),
-    ]);
+  describe('Playing against machine', function () {
+    it('should not accept if argument does not contain a valid move', function () {
+      service.bet({ move: 'INVALID' } as CommandArguments);
 
-    await service.bet({ move: 'SCISSOR' } as CommandArguments);
+      expect(_cli.error).toHaveBeenCalledWith(GameConsole.messages.wrong_input);
+    });
 
-    expect(_cli.success).not.toHaveBeenCalled();
-    expect(_cli.error).toHaveBeenCalledWith(GameConsole.messages.lose);
-  });
+    it('should make bet', async () => {
+      gameService.playerGame.mockResolvedValue([
+        new Move({
+          move: Jokenpo.ROCK,
+          isConn: false,
+          win: true,
+        }),
+        new Move({
+          move: Jokenpo.SCISSOR,
+          isConn: true,
+          win: false,
+        }),
+      ]);
 
-  it('should be a tie', async () => {
-    gameService.playerGame.mockResolvedValue([
-      new Move({
-        move: Jokenpo.ROCK,
-        isConn: false,
-        win: false,
-      }),
-      new Move({
-        move: Jokenpo.ROCK,
-        isConn: true,
-        win: false,
-      }),
-    ]);
+      await service.bet({ move: 'ROCK' } as CommandArguments);
 
-    await service.bet({ move: 'ROCK' } as CommandArguments);
+      expect(_cli.error).not.toHaveBeenCalled();
+      expect(gameService.playerGame).toHaveBeenCalledWith(
+        new Move({ isConn: false, move: Jokenpo.ROCK }),
+      );
+      expect(_cli.success).toHaveBeenCalledWith(GameConsole.messages.win);
+    });
 
-    expect(_cli.success).not.toHaveBeenCalled();
-    expect(_cli.error).not.toHaveBeenCalled();
-    expect(_cli.info).toHaveBeenCalledWith(GameConsole.messages.tie);
+    it('should lose the game', async () => {
+      gameService.playerGame.mockResolvedValue([
+        new Move({
+          move: Jokenpo.SCISSOR,
+          isConn: false,
+          win: false,
+        }),
+        new Move({
+          move: Jokenpo.ROCK,
+          isConn: true,
+          win: true,
+        }),
+      ]);
+
+      await service.bet({ move: 'SCISSOR' } as CommandArguments);
+
+      expect(_cli.success).not.toHaveBeenCalled();
+      expect(_cli.error).toHaveBeenCalledWith(GameConsole.messages.lose);
+    });
+
+    it('should be a tie', async () => {
+      gameService.playerGame.mockResolvedValue([
+        new Move({
+          move: Jokenpo.ROCK,
+          isConn: false,
+          win: false,
+        }),
+        new Move({
+          move: Jokenpo.ROCK,
+          isConn: true,
+          win: false,
+        }),
+      ]);
+
+      await service.bet({ move: 'ROCK' } as CommandArguments);
+
+      expect(_cli.success).not.toHaveBeenCalled();
+      expect(_cli.error).not.toHaveBeenCalled();
+      expect(_cli.info).toHaveBeenCalledWith(GameConsole.messages.tie);
+    });
   });
 });

@@ -51,4 +51,24 @@ export class GameConsole {
     _cli.error(GameConsole.messages.lose);
     return;
   }
+
+  @Command('auto', {
+    desc: 'auto bet',
+  })
+  async auto() {
+    const result = await this.game.autoPlay();
+
+    if (result.filter((it) => it.win).length === 0) {
+      _cli.info(GameConsole.messages.tie);
+      return;
+    }
+
+    result.forEach((bot, index) => {
+      if (bot.win) {
+        _cli.success(`bot0${index + 1} win with ${bot.move}`);
+      } else {
+        _cli.error(`bot0${index + 1} lose with ${bot.move}`);
+      }
+    });
+  }
 }
